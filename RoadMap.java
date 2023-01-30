@@ -242,13 +242,17 @@ public class RoadMap {
 		}
 
 		//---
-		// implement dijkstra's / A*
-
-
-		// generate list of nodes for shortest route
-
-
-		// find if all nodes inbetween have charging points
+		// check if start and end nodes are directly connected
+		// > start by getting all incident roads of start
+		int connectedVertexIDs[];
+		for (Edge e : startVertex.getIncidentRoads()){
+			connectedVertexIDs.add(e.getFirstVertex());
+		}
+		// > get all connected nodes' indexes
+		// > check if end vertex is either connected node
+		// > if so, return true
+		// > otherwise, move to the shortest distance node that does have a charging station
+		
 
 
 		//---
