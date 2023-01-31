@@ -244,12 +244,18 @@ public class RoadMap {
 		//---
 		// check if start and end nodes are directly connected
 		// > start by getting all incident roads of start
-		int connectedVertexIDs[];
+		ArrayList<Integer> connectedVertexIDs = new ArrayList<Integer>();
 		for (Edge e : startVertex.getIncidentRoads()){
-			connectedVertexIDs.add(e.getFirstVertex());
+			// check that the node being searched is not the current location node
+			
+			// > get connected node index
+			int nextVertex = (e.getFirstVertex()).getIndex();
+			connectedVertexIDs.add(nextVertex);
+			// > check if end vertex is the current connected node
+			if (nextVertex == endVertex.getIndex()){
+				return true;
+			}
 		}
-		// > get all connected nodes' indexes
-		// > check if end vertex is either connected node
 		// > if so, return true
 		// > otherwise, move to the shortest distance node that does have a charging station
 		
