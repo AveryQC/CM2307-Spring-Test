@@ -80,7 +80,7 @@ public class RoadMap {
 	// Auxiliary function that prints out the command syntax
 	public static void printCommandError() {
 		System.err.println("ERROR: use one of the following commands");
-		System.err.println(" - Load a map and print information:")
+		System.err.println(" - Load a map and print information:");
 		System.err.println("      java RoadMap -i <MapFile>");
 		System.err.println(" - Load a map and determine if two places are connnected by a path with charging stations:");
 		System.err.println("      java RoadMap -c <MapFile> <StartVertexIndex> <EndVertexIndex>");
