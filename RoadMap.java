@@ -263,6 +263,29 @@ public class RoadMap {
 			}
 		}
 
+		// list process here:
+		// 1) get the connected nodes
+
+		// 2) create 2 lists: one to store valid nodes
+		//    and one that stores invalid nodes
+
+		// 3) from all the connected nodes, check if they are in the invalid list
+		//    if so, ignore it. Otherwise, check the charging station flag
+
+		// 4) if it has a charging station, add to valid list
+
+		// 5) once this is done, loop through the valid list, and recursively call f(x,y)
+		//    where x = the new node (node n in list), and y is the end node
+		//    AT NO POINT SHOULD Y CHANGE
+
+		// 6) when true is returned, the end node has been reached
+		//    indicating an existing path
+		//    when false is returned (from the valid list being exhausted),
+		//    the recursion should continue to loop again from the previous valid node
+		//    ENSURE THIS DOES NOT EXCEED COMPLEXITY LIMIT OF 16
+		
+		// MAY GET STUCK IN AN INFINITE LOOP SO BE WARY, TRY TO FIGURE OUT A WAY TO BYPASS THIS
+
 		
 		
 
