@@ -242,50 +242,85 @@ public class RoadMap {
 		}
 
 		//---
-		// check if start and end nodes are directly connected
-		// > start by getting all incident roads of start
-		ArrayList<Integer> validVertexIDs = new ArrayList<Integer>();
+		int loopStateCheck = 1;
+		// 0 = end process, 1 = new move, 2 = backtrack move
+		ArrayList<Vertex> validVertexs = new ArrayList<Vertex>();
+		ArrayList<Vertex> invalidVertexs = new ArrayList<Vertex>();
+		validVertexs.add(startVertex);
 
-		int loopStateCheck = 0;
-
-		while (loopStateCheck == 0){
-
-			for (Edge e : startVertex.getIncidentRoads()){
-				// first check that the node we are chekcing is not the current node
-				if (e.getFirstVertex() != startVertex){
-					// next check the nodeID is not already in 
-
-					// next check that the node has a charging station
-					if ((e.getFirstVertex()).hasChargingStation() == true){
-						validVertexIDs.add((e.getFirstVertex()).getIndex());
+		while (loopStateCheck != 0){
+		
+			// get connected nodes
+			if (loopStateCheck == 1){
+				for (Edge e : startVertex.getIncidentRoads()){
+					if (e.getFirstVertex().getIndex() == startVertex.getIndex()){
+						// ignore it
+					} else {
+						if ((e.getFirstVertex()).hasChargingStation() == false){
+							// ignore it
+						} else {
+							if (validVertexs.contains(e.getFirstVertex()) || invalidVertexs.contains(e.getFirstVertex())){
+								// ignore it
+							} else {
+								validVertexs.add(e.getFirstVertex());
+								loopStateCheck = 1;
+							}
+						}
 					}
-				}
+					
+					if (e.getSecondVertex().getIndex() == startVertex.getIndex()){
+						// ignore it
+					} else {
+						if ((e.getSecondVertex()).hasChargingStation() == false){
+							// ignore it
+						} else {
+							if (validVertexs.contains(e.getSecondVertex()) || invalidVertexs.contains(e.getSecondVertex())){
+								// ignore it
+							} else {
+								validVertexs.add(e.getSecondVertex());
+								loopStateCheck = 1;
+							}
+						}
+					}
 			}
+			// get connected nodes
+
+			// change start node
+				if (loopStateCheck == 1){
+					// when move forward
+					startVertex = validVertexs.get(1);
+				} else if (loopStateCheck == 2) {
+					// when move backward
+					startVertex = validVertexs.get(1);
+					invalidVertexs.add(validVertexs.get(1));
+					validVertexs.remove(1);
+				} else {
+					
+				}
+
+			}
+
+
+
+
+
+
+
+
+
+
+
+
+			
 		}
 
 		// list process here:
 		// 1) get the connected nodes
-
-		// 2) create 2 lists: one to store valid nodes
-		//    and one that stores invalid nodes
-
-		// 3) from all the connected nodes, check if they are in the invalid list
-		//    if so, ignore it. Otherwise, check the charging station flag
-
-		// 4) if it has a charging station, add to valid list
-
-		// 5) once this is done, loop through the valid list, and recursively call f(x,y)
-		//    where x = the new node (node n in list), and y is the end node
-		//    AT NO POINT SHOULD Y CHANGE
-
-		// 6) when true is returned, the end node has been reached
-		//    indicating an existing path
-		//    when false is returned (from the valid list being exhausted),
-		//    the recursion should continue to loop again from the previous valid node
-		//    ENSURE THIS DOES NOT EXCEED COMPLEXITY LIMIT OF 16
-		
-		// MAY GET STUCK IN AN INFINITE LOOP SO BE WARY, TRY TO FIGURE OUT A WAY TO BYPASS THIS
-
+		// 2) for each node:
+		//    determine if node has charging station
+		//    if so, add to route and 'move' there
+		//    if not, ignore it
+		// 3) repeat this function
 		
 		
 
