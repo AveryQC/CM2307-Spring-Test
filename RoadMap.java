@@ -244,40 +244,52 @@ public class RoadMap {
 		//---
 		int loopStateCheck = 1;
 		// 0 = end process, 1 = new move, 2 = backtrack move
-		ArrayList<Vertex> validVertexs = new ArrayList<Vertex>();
-		ArrayList<Vertex> invalidVertexs = new ArrayList<Vertex>();
-		validVertexs.add(startVertex);
+		ArrayList<Vertex> validVertexes = new ArrayList<Vertex>();
+		ArrayList<Vertex> invalidVertexes = new ArrayList<Vertex>();
+		validVertexes.add(startVertex);
+		int numOfVertexes = 1;
 
 		while (loopStateCheck != 0){
 		
+			loopStateCheck = 2; // we assume that there is nowhere to go until proven otherwise
+
 			// get connected nodes
-			if (loopStateCheck == 1){
 				for (Edge e : startVertex.getIncidentRoads()){
+					// if the node is the end we're searching for we can stop here immediately
+					if (e.getFirstVertex() == endVertex){
+						return true;
+					}
 					if (e.getFirstVertex().getIndex() == startVertex.getIndex()){
 						// ignore it
 					} else {
 						if ((e.getFirstVertex()).hasChargingStation() == false){
 							// ignore it
 						} else {
-							if (validVertexs.contains(e.getFirstVertex()) || invalidVertexs.contains(e.getFirstVertex())){
+							if (validVertexes.contains(e.getFirstVertex()) || invalidVertexes.contains(e.getFirstVertex())){
 								// ignore it
 							} else {
-								validVertexs.add(e.getFirstVertex());
+								validVertexes.add(e.getFirstVertex());
+								numOfVertexes += 1;
 								loopStateCheck = 1;
 							}
 						}
 					}
 					
+					// if the node is the end we're searching for we can stop here immediately
+					if (e.getSecondVertex() == endVertex){
+						return true;
+					}
 					if (e.getSecondVertex().getIndex() == startVertex.getIndex()){
 						// ignore it
 					} else {
 						if ((e.getSecondVertex()).hasChargingStation() == false){
 							// ignore it
 						} else {
-							if (validVertexs.contains(e.getSecondVertex()) || invalidVertexs.contains(e.getSecondVertex())){
+							if (validVertexes.contains(e.getSecondVertex()) || invalidVertexes.contains(e.getSecondVertex())){
 								// ignore it
 							} else {
-								validVertexs.add(e.getSecondVertex());
+								validVertexes.add(e.getSecondVertex());
+								numOfVertexes += 1;
 								loopStateCheck = 1;
 							}
 						}
@@ -286,43 +298,23 @@ public class RoadMap {
 			// get connected nodes
 
 			// change start node
-				if (loopStateCheck == 1){
-					// when move forward
-					startVertex = validVertexs.get(1);
-				} else if (loopStateCheck == 2) {
-					// when move backward
-					startVertex = validVertexs.get(1);
-					invalidVertexs.add(validVertexs.get(1));
-					validVertexs.remove(1);
-				} else {
-					
-				}
-
+			if (loopStateCheck == 1){
+				// when move forward
+				startVertex = validVertexes.get(numOfVertexes);
+			} else if (loopStateCheck == 2) {
+				// when move backward
+				startVertex = validVertexes.get(numOfVertexes);
+				invalidVertexes.add(validVertexes.get(numOfVertexes));
+				validVertexes.remove(numOfVertexes);
+				numOfVertexes -= 1;
 			}
 
+			if (numOfVertexes == 0){
+				loopStateCheck = 0;
+			}
+			// change start node
 
-
-
-
-
-
-
-
-
-
-
-			
-		}
-
-		// list process here:
-		// 1) get the connected nodes
-		// 2) for each node:
-		//    determine if node has charging station
-		//    if so, add to route and 'move' there
-		//    if not, ignore it
-		// 3) repeat this function
-		
-		
+			}
 
 		//---
 
