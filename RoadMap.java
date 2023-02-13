@@ -230,7 +230,6 @@ public class RoadMap {
 	}
 
 
-
 	// Task 2: Check if two vertices are connected by a path with charging stations on each itermediate vertex.
 	// Return true if such a path exists; return false otherwise.
 	// The worst-case time complexity of your algorithm should be no worse than O(v + e),
@@ -329,8 +328,7 @@ public class RoadMap {
 	public int minNumAssistanceCars() {
 		// Add your code here to compute and return the minimum number of assistance cars required for this map
 
-		// Method
-		
+		// ---		
 		// 1) pick random node
 		// 2) figure out random route that goes through every possible node
 		// 3) backtrack when at dead end
@@ -341,13 +339,52 @@ public class RoadMap {
 		//     if so, exit the loop, and return the number of cars requried
 		// 6) idk at this point
 
+		int carsRequried = 0;
+		int nextVertexIndex = 0;
+		boolean allNodesVisited = false;
+		ArrayList <Vertex> visitedVertexes = new ArrayList<Vertex>();
+		ArrayList <Vertex> toVisitVertexes = new ArrayList<Vertex>();
+
+		while (allNodesVisited == false){
+			
+			Vertex startingVertex = places.get(nextVertexIndex);
+			
+			if (toVisitVertexes.isEmpty() == false){ //where toVisitVertexes has new places to go to
+				visitedVertexes.add(toVisitVertexes.get(0));
+				startingVertex = toVisitVertexes.get(0);
+				toVisitVertexes.remove(0);
+			} else { // where toVisitVertexes is empty (so there are no new vertexes to visit)
+				carsRequried += 1;
+				while (visitedVertexes.contains(startingVertex) == false && nextVertexIndex != places.size() ){
+					//ignore it
+					nextVertexIndex += 1;
+					startingVertex = places.get(nextVertexIndex);
+				}
+				visitedVertexes.add(startingVertex);
+			}
 
 
+			for (Edge e : (startingVertex.getIncidentRoads())){
+				if (visitedVertexes.contains(e.getFirstVertex())){
+					// ignore it
+				} else {
+					toVisitVertexes.add(e.getFirstVertex());
+				}
 
+				if (visitedVertexes.contains(e.getSecondVertex())){
+					// ignore it
+				} else {
+					toVisitVertexes.add(e.getSecondVertex());
+				}
+			}
+			
+	
+			if (visitedVertexes.size() == numPlaces()){
+				allNodesVisited = true;
+			}
+		}
 
-
-
-
+		return carsRequried;
 	}
 
 
