@@ -328,6 +328,26 @@ public class RoadMap {
 	// Task 3: Determine the mininum number of assistance cars required
 	public int minNumAssistanceCars() {
 		// Add your code here to compute and return the minimum number of assistance cars required for this map
+
+		// Method
+		
+		// 1) pick random node
+		// 2) figure out random route that goes through every possible node
+		// 3) backtrack when at dead end
+		// 4) when start node reached, add 1 to car counter
+		// 5a) keep all visited nodes in an array until a new node can be selected
+		//     once new node selected, add the number of nodes to a counter and clear list
+		// 5b) check if node counter is equal to the total number of nodes present
+		//     if so, exit the loop, and return the number of cars requried
+		// 6) idk at this point
+
+
+
+
+
+
+
+
 	}
 
 
