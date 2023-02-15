@@ -170,7 +170,7 @@ public class RoadMap {
 		}
 	}
 
-	// Task 1: Load the map from a text file
+	// Task 1: Load the map from a text file #PASS#
 	public void loadMap(String filename) {
 		File file = new File(filename);
 		places.clear();
@@ -230,7 +230,7 @@ public class RoadMap {
 	}
 
 
-	// Task 2: Check if two vertices are connected by a path with charging stations on each itermediate vertex.
+	// Task 2: Check if two vertices are connected by a path with charging stations on each itermediate vertex. #FAIL#
 	// Return true if such a path exists; return false otherwise.
 	// The worst-case time complexity of your algorithm should be no worse than O(v + e),
 	// where v and e are the number of vertices and the number of edges in the graph.
@@ -324,7 +324,7 @@ public class RoadMap {
 	}
 
 
-	// Task 3: Determine the mininum number of assistance cars required
+	// Task 3: Determine the mininum number of assistance cars required #FAIL#
 	public int minNumAssistanceCars() {
 		// Add your code here to compute and return the minimum number of assistance cars required for this map
 
