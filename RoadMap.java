@@ -80,7 +80,7 @@ public class RoadMap {
 	// Auxiliary function that prints out the command syntax
 	public static void printCommandError() {
 		System.err.println("ERROR: use one of the following commands");
-		System.err.println(" - Load a map and print information:")
+		System.err.println(" - Load a map and print information:");
 		System.err.println("      java RoadMap -i <MapFile>");
 		System.err.println(" - Load a map and determine if two places are connnected by a path with charging stations:");
 		System.err.println("      java RoadMap -c <MapFile> <StartVertexIndex> <EndVertexIndex>");
@@ -230,7 +230,6 @@ public class RoadMap {
 	}
 
 
-
 	// Task 2: Check if two vertices are connected by a path with charging stations on each itermediate vertex.
 	// Return true if such a path exists; return false otherwise.
 	// The worst-case time complexity of your algorithm should be no worse than O(v + e),
@@ -242,14 +241,79 @@ public class RoadMap {
 		}
 
 		//---
-		// implement dijkstra's / A*
+		int loopStateCheck = 1;
+		// 0 = end process, 1 = new move, 2 = backtrack move
+		ArrayList<Vertex> validVertexes = new ArrayList<Vertex>();
+		ArrayList<Vertex> invalidVertexes = new ArrayList<Vertex>();
+		validVertexes.add(startVertex);
+		int numOfVertexes = 1;
 
+		while (loopStateCheck != 0){
+		
+			loopStateCheck = 2; // we assume that there is nowhere to go until proven otherwise
 
-		// generate list of nodes for shortest route
+			// get connected nodes
+				for (Edge e : startVertex.getIncidentRoads()){
+					// if the node is the end we're searching for we can stop here immediately
+					if (e.getFirstVertex() == endVertex){
+						return true;
+					}
+					if (e.getFirstVertex().getIndex() == startVertex.getIndex()){
+						// ignore it
+					} else {
+						if ((e.getFirstVertex()).hasChargingStation() == false){
+							// ignore it
+						} else {
+							if (validVertexes.contains(e.getFirstVertex()) || invalidVertexes.contains(e.getFirstVertex())){
+								// ignore it
+							} else {
+								validVertexes.add(e.getFirstVertex());
+								numOfVertexes += 1;
+								loopStateCheck = 1;
+							}
+						}
+					}
+					
+					// if the node is the end we're searching for we can stop here immediately
+					if (e.getSecondVertex() == endVertex){
+						return true;
+					}
+					if (e.getSecondVertex().getIndex() == startVertex.getIndex()){
+						// ignore it
+					} else {
+						if ((e.getSecondVertex()).hasChargingStation() == false){
+							// ignore it
+						} else {
+							if (validVertexes.contains(e.getSecondVertex()) || invalidVertexes.contains(e.getSecondVertex())){
+								// ignore it
+							} else {
+								validVertexes.add(e.getSecondVertex());
+								numOfVertexes += 1;
+								loopStateCheck = 1;
+							}
+						}
+					}
+			}
+			// get connected nodes
 
+			// change start node
+			if (loopStateCheck == 1){
+				// when move forward
+				startVertex = validVertexes.get(numOfVertexes);
+			} else if (loopStateCheck == 2) {
+				// when move backward
+				startVertex = validVertexes.get(numOfVertexes);
+				invalidVertexes.add(validVertexes.get(numOfVertexes));
+				validVertexes.remove(numOfVertexes);
+				numOfVertexes -= 1;
+			}
 
-		// find if all nodes inbetween have charging points
+			if (numOfVertexes == 0){
+				loopStateCheck = 0;
+			}
+			// change start node
 
+			}
 
 		//---
 
@@ -263,6 +327,64 @@ public class RoadMap {
 	// Task 3: Determine the mininum number of assistance cars required
 	public int minNumAssistanceCars() {
 		// Add your code here to compute and return the minimum number of assistance cars required for this map
+
+		// ---		
+		// 1) pick random node
+		// 2) figure out random route that goes through every possible node
+		// 3) backtrack when at dead end
+		// 4) when start node reached, add 1 to car counter
+		// 5a) keep all visited nodes in an array until a new node can be selected
+		//     once new node selected, add the number of nodes to a counter and clear list
+		// 5b) check if node counter is equal to the total number of nodes present
+		//     if so, exit the loop, and return the number of cars requried
+		// 6) idk at this point
+
+		int carsRequried = 0;
+		int nextVertexIndex = 0;
+		boolean allNodesVisited = false;
+		ArrayList <Vertex> visitedVertexes = new ArrayList<Vertex>();
+		ArrayList <Vertex> toVisitVertexes = new ArrayList<Vertex>();
+
+		while (allNodesVisited == false){
+			
+			Vertex startingVertex = places.get(nextVertexIndex);
+			
+			if (toVisitVertexes.isEmpty() == false){ //where toVisitVertexes has new places to go to
+				visitedVertexes.add(toVisitVertexes.get(0));
+				startingVertex = toVisitVertexes.get(0);
+				toVisitVertexes.remove(0);
+			} else { // where toVisitVertexes is empty (so there are no new vertexes to visit)
+				carsRequried += 1;
+				while (visitedVertexes.contains(startingVertex) == false && nextVertexIndex != places.size() ){
+					//ignore it
+					nextVertexIndex += 1;
+					startingVertex = places.get(nextVertexIndex);
+				}
+				visitedVertexes.add(startingVertex);
+			}
+
+
+			for (Edge e : (startingVertex.getIncidentRoads())){
+				if (visitedVertexes.contains(e.getFirstVertex())){
+					// ignore it
+				} else {
+					toVisitVertexes.add(e.getFirstVertex());
+				}
+
+				if (visitedVertexes.contains(e.getSecondVertex())){
+					// ignore it
+				} else {
+					toVisitVertexes.add(e.getSecondVertex());
+				}
+			}
+			
+	
+			if (visitedVertexes.size() == numPlaces()){
+				allNodesVisited = true;
+			}
+		}
+
+		return carsRequried;
 	}
 
 
