@@ -249,20 +249,12 @@ public class RoadMap {
 		int numOfVertexes = 1;
 
 		while (loopStateCheck != 0){
-			
-			System.out.println("---");
-			System.out.println("Loop state check = " + loopStateCheck);
-
 			loopStateCheck = 2; // we assume that there is nowhere to go until proven otherwise
 
 			// get connected nodes
 				for (Edge e : startVertex.getIncidentRoads()){
-
-					System.out.println(" Next vertex = " + (e.getFirstVertex()).getIndex());
-
 					// if the node is the end we're searching for we can stop here immediately
 					if (e.getFirstVertex() == endVertex){
-						System.out.println("Goal reached");
 						return true;
 					}
 					if (e.getFirstVertex().getIndex() == startVertex.getIndex()){
@@ -274,21 +266,15 @@ public class RoadMap {
 							if (validVertexes.contains(e.getFirstVertex()) || invalidVertexes.contains(e.getFirstVertex())){
 								// ignore it
 							} else {
-								
-								System.out.println("Vertex accepted");
-
 								validVertexes.add(e.getFirstVertex());
 								numOfVertexes += 1;
 								loopStateCheck = 1;
 							}
 						}
 					}
-					
-					System.out.println(" Next vertex = " + (e.getSecondVertex()).getIndex());
 
 					// if the node is the end we're searching for we can stop here immediately
 					if (e.getSecondVertex() == endVertex){
-						System.out.println("Goal reached");
 						return true;
 					}
 					if (e.getSecondVertex().getIndex() == startVertex.getIndex()){
@@ -300,9 +286,6 @@ public class RoadMap {
 							if (validVertexes.contains(e.getSecondVertex()) || invalidVertexes.contains(e.getSecondVertex())){
 								// ignore it
 							} else {
-								
-								System.out.println("Vertex accepted");
-
 								validVertexes.add(e.getSecondVertex());
 								numOfVertexes += 1;
 								loopStateCheck = 1;
@@ -312,25 +295,16 @@ public class RoadMap {
 			}
 			// get connected nodes
 
-			System.out.println("We are out of the loop");
-			System.out.println("Loop state check = " + loopStateCheck);
-
 			// change start node
 			if (loopStateCheck == 1){
 				// when move forward
 				startVertex = validVertexes.get(numOfVertexes - 1);
-				
-				System.out.println("New start vertex (forward) = " + startVertex.getIndex());
-
 			} else if (loopStateCheck == 2) {
 				// when move backward
 				startVertex = validVertexes.get(numOfVertexes - 1);
 				invalidVertexes.add(validVertexes.get(numOfVertexes - 1));
 				validVertexes.remove(numOfVertexes - 1);
-				numOfVertexes -= 1;
-			
-				System.out.println("New start vertex (backward) = " + startVertex.getIndex());
-				
+				numOfVertexes -= 1;			
 			}
 
 			if (numOfVertexes == 0){
@@ -339,8 +313,6 @@ public class RoadMap {
 			// change start node
 
 			}
-
-			System.out.println("No valid path exists");
 		//---
 
 		// The following return statement is just a placeholder.
