@@ -258,10 +258,11 @@ public class RoadMap {
 			// get connected nodes
 				for (Edge e : startVertex.getIncidentRoads()){
 
-					System.out.println(" Next vertex = " + e.getFirstVertex());
+					System.out.println(" Next vertex = " + (e.getFirstVertex()).getIndex());
 
 					// if the node is the end we're searching for we can stop here immediately
 					if (e.getFirstVertex() == endVertex){
+						System.out.println("Goal reached");
 						return true;
 					}
 					if (e.getFirstVertex().getIndex() == startVertex.getIndex()){
@@ -283,10 +284,11 @@ public class RoadMap {
 						}
 					}
 					
-					System.out.println(" Next vertex = " + e.getSecondVertex());
+					System.out.println(" Next vertex = " + (e.getSecondVertex()).getIndex());
 
 					// if the node is the end we're searching for we can stop here immediately
 					if (e.getSecondVertex() == endVertex){
+						System.out.println("Goal reached");
 						return true;
 					}
 					if (e.getSecondVertex().getIndex() == startVertex.getIndex()){
@@ -310,25 +312,26 @@ public class RoadMap {
 			}
 			// get connected nodes
 
+			System.out.println("We are out of the loop");
+			System.out.println("Loop state check = " + loopStateCheck);
+
 			// change start node
 			if (loopStateCheck == 1){
 				// when move forward
-				startVertex = validVertexes.get(numOfVertexes);
+				startVertex = validVertexes.get(numOfVertexes - 1);
 				
-				System.out.println("New start vertex (forward) = " + startVertex);
+				System.out.println("New start vertex (forward) = " + startVertex.getIndex());
 
 			} else if (loopStateCheck == 2) {
 				// when move backward
-				startVertex = validVertexes.get(numOfVertexes);
-				invalidVertexes.add(validVertexes.get(numOfVertexes));
-				validVertexes.remove(numOfVertexes);
+				startVertex = validVertexes.get(numOfVertexes - 1);
+				invalidVertexes.add(validVertexes.get(numOfVertexes - 1));
+				validVertexes.remove(numOfVertexes - 1);
 				numOfVertexes -= 1;
 			
-				System.out.println("New start vertex (backward) = " + startVertex);
+				System.out.println("New start vertex (backward) = " + startVertex.getIndex());
 				
 			}
-
-			System.out.println("Number of vertexes left = " + numOfVertexes);
 
 			if (numOfVertexes == 0){
 				loopStateCheck = 0;
@@ -337,6 +340,7 @@ public class RoadMap {
 
 			}
 
+			System.out.println("No valid path exists");
 		//---
 
 		// The following return statement is just a placeholder.
