@@ -249,11 +249,17 @@ public class RoadMap {
 		int numOfVertexes = 1;
 
 		while (loopStateCheck != 0){
-		
+			
+			System.out.println("---");
+			System.out.println("Loop state check = " + loopStateCheck);
+
 			loopStateCheck = 2; // we assume that there is nowhere to go until proven otherwise
 
 			// get connected nodes
 				for (Edge e : startVertex.getIncidentRoads()){
+
+					System.out.println(" Next vertex = " + e.getFirstVertex());
+
 					// if the node is the end we're searching for we can stop here immediately
 					if (e.getFirstVertex() == endVertex){
 						return true;
@@ -267,6 +273,9 @@ public class RoadMap {
 							if (validVertexes.contains(e.getFirstVertex()) || invalidVertexes.contains(e.getFirstVertex())){
 								// ignore it
 							} else {
+								
+								System.out.println("Vertex accepted");
+
 								validVertexes.add(e.getFirstVertex());
 								numOfVertexes += 1;
 								loopStateCheck = 1;
@@ -274,6 +283,8 @@ public class RoadMap {
 						}
 					}
 					
+					System.out.println(" Next vertex = " + e.getSecondVertex());
+
 					// if the node is the end we're searching for we can stop here immediately
 					if (e.getSecondVertex() == endVertex){
 						return true;
@@ -287,6 +298,9 @@ public class RoadMap {
 							if (validVertexes.contains(e.getSecondVertex()) || invalidVertexes.contains(e.getSecondVertex())){
 								// ignore it
 							} else {
+								
+								System.out.println("Vertex accepted");
+
 								validVertexes.add(e.getSecondVertex());
 								numOfVertexes += 1;
 								loopStateCheck = 1;
@@ -300,13 +314,21 @@ public class RoadMap {
 			if (loopStateCheck == 1){
 				// when move forward
 				startVertex = validVertexes.get(numOfVertexes);
+				
+				System.out.println("New start vertex (forward) = " + startVertex);
+
 			} else if (loopStateCheck == 2) {
 				// when move backward
 				startVertex = validVertexes.get(numOfVertexes);
 				invalidVertexes.add(validVertexes.get(numOfVertexes));
 				validVertexes.remove(numOfVertexes);
 				numOfVertexes -= 1;
+			
+				System.out.println("New start vertex (backward) = " + startVertex);
+				
 			}
+
+			System.out.println("Number of vertexes left = " + numOfVertexes);
 
 			if (numOfVertexes == 0){
 				loopStateCheck = 0;
