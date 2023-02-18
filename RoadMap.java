@@ -323,75 +323,47 @@ public class RoadMap {
 		// Add your code here to compute and return the minimum number of assistance cars required for this map
 
 		// ---		
-		// 1) pick random node
-		// 2) figure out random route that goes through every possible node
-		// 3) backtrack when at dead end
-		// 4) when start node reached, add 1 to car counter
-		// 5a) keep all visited nodes in an array until a new node can be selected
-		//     once new node selected, add the number of nodes to a counter and clear list
-		// 5b) check if node counter is equal to the total number of nodes present
-		//     if so, exit the loop, and return the number of cars requried
-		// 6) idk at this point
-
-		int carsRequried = 0;
 		int nextVertexIndex = 0;
 		boolean allNodesVisited = false;
 		ArrayList <Vertex> visitedVertexes = new ArrayList<Vertex>();
 		ArrayList <Vertex> toVisitVertexes = new ArrayList<Vertex>();
+		int carsRequried = 0;
 
 		while (allNodesVisited == false){
-			
-			System.out.println("---");
-			System.out.println("Value of nextVertexIndex = " + nextVertexIndex);
-
 			Vertex startingVertex = places.get(nextVertexIndex);
 			
-			if (toVisitVertexes.isEmpty() == false){ //where toVisitVertexes has new places to go to
-				visitedVertexes.add(toVisitVertexes.get(0));
+			if (toVisitVertexes.isEmpty() == false){
 				startingVertex = toVisitVertexes.get(0);
-
-				System.out.println("Next vertex = " + startingVertex.getIndex());
-
 				toVisitVertexes.remove(0);
-			} else { // where toVisitVertexes is empty (so there are no new vertexes to visit)
-				
+			} else {
+				nextVertexIndex += 1;
+				carsRequried += 1;
+			}
 
-				System.out.println("Number of cars required = " + carsRequried);
-
-				while (visitedVertexes.contains(startingVertex) == false && nextVertexIndex != places.size() - 1){
-					//ignore it
-					nextVertexIndex += 1;
-					startingVertex = places.get(nextVertexIndex);
-				}
+			if (visitedVertexes.contains(startingVertex)){
+				//ignore it
+			} else {
 				visitedVertexes.add(startingVertex);
-			}
 
-			for (Edge e : (startingVertex.getIncidentRoads())){
-				if (visitedVertexes.contains(e.getFirstVertex())){
-					// ignore it
-				} else {
-					carsRequried += 1;
-					System.out.println("Adding vertex = " + (e.getFirstVertex()).getIndex());
+				for (Edge road : startingVertex.getIncidentRoads()) {
+					if (visitedVertexes.contains(road.getFirstVertex()) || (toVisitVertexes.contains(road.getFirstVertex()))){
+						//ignore it
+					} else {
+						toVisitVertexes.add(road.getFirstVertex());
+					}
 
-					toVisitVertexes.add(e.getFirstVertex());
-				}
-
-				if (visitedVertexes.contains(e.getSecondVertex())){
-					// ignore it
-				} else {
-					carsRequried += 1;
-					System.out.println("Adding vertex = " + (e.getSecondVertex()).getIndex());
-
-					toVisitVertexes.add(e.getSecondVertex());
+					if (visitedVertexes.contains(road.getSecondVertex()) || (toVisitVertexes.contains(road.getSecondVertex()))){
+						//ignore it
+					} else {
+						toVisitVertexes.add(road.getSecondVertex());
+					}
 				}
 			}
-			
-			System.out.println("Size of visited vertexes list = " + visitedVertexes.size());
-			System.out.println("Number of places total = " + numPlaces());
 
 			if (visitedVertexes.size() == numPlaces()){
 				allNodesVisited = true;
 			}
+
 		}
 
 		System.out.println("End reached");
