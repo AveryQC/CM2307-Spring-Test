@@ -170,7 +170,7 @@ public class RoadMap {
 		}
 	}
 
-	// Task 1: Load the map from a text file #PASS#
+	// Task 1 #PASS#
 	public void loadMap(String filename) {
 		File file = new File(filename);
 		places.clear();
@@ -229,11 +229,7 @@ public class RoadMap {
 		}
 	}
 
-
-	// Task 2: Check if two vertices are connected by a path with charging stations on each itermediate vertex. #FAIL#
-	// Return true if such a path exists; return false otherwise.
-	// The worst-case time complexity of your algorithm should be no worse than O(v + e),
-	// where v and e are the number of vertices and the number of edges in the graph.
+	// Task 2 #PASS#
 	public boolean isConnectedWithChargingStations(Vertex startVertex, Vertex endVertex) {
 		// Sanity check
 		if (startVertex.getIndex() == endVertex.getIndex()) {
@@ -361,7 +357,6 @@ public class RoadMap {
 				visitedVertexes.add(startingVertex);
 			}
 
-
 			for (Edge e : (startingVertex.getIncidentRoads())){
 				if (visitedVertexes.contains(e.getFirstVertex())){
 					// ignore it
@@ -376,7 +371,6 @@ public class RoadMap {
 				}
 			}
 			
-	
 			if (visitedVertexes.size() == numPlaces()){
 				allNodesVisited = true;
 			}
