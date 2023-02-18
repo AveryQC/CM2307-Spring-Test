@@ -332,12 +332,16 @@ public class RoadMap {
 		while (allNodesVisited == false){
 			Vertex startingVertex = places.get(nextVertexIndex);
 			
-			if (toVisitVertexes.isEmpty() == false){
+			if (toVisitVertexes.isEmpty() == false){ // toVisitVertexes has items
 				startingVertex = toVisitVertexes.get(0);
 				toVisitVertexes.remove(0);
-			} else {
+
+				if (toVisitVertexes.isEmpty() == true){
+					carsRequried += 1;
+				}
+
+			} else { // toVisitVertexes is empty
 				nextVertexIndex += 1;
-				carsRequried += 1;
 			}
 
 			if (visitedVertexes.contains(startingVertex)){
@@ -366,7 +370,6 @@ public class RoadMap {
 
 		}
 
-		System.out.println("End reached");
 		return carsRequried;
 	}
 
