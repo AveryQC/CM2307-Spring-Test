@@ -341,15 +341,24 @@ public class RoadMap {
 
 		while (allNodesVisited == false){
 			
+			System.out.println("---");
+			System.out.println("Value of nextVertexIndex = " + nextVertexIndex);
+
 			Vertex startingVertex = places.get(nextVertexIndex);
 			
 			if (toVisitVertexes.isEmpty() == false){ //where toVisitVertexes has new places to go to
 				visitedVertexes.add(toVisitVertexes.get(0));
 				startingVertex = toVisitVertexes.get(0);
+
+				System.out.println("Next vertex = " + startingVertex.getIndex());
+
 				toVisitVertexes.remove(0);
 			} else { // where toVisitVertexes is empty (so there are no new vertexes to visit)
 				carsRequried += 1;
-				while (visitedVertexes.contains(startingVertex) == false && nextVertexIndex != places.size() ){
+
+				System.out.println("Number of cars required = " + carsRequried);
+
+				while (visitedVertexes.contains(startingVertex) == false && nextVertexIndex != places.size() - 1){
 					//ignore it
 					nextVertexIndex += 1;
 					startingVertex = places.get(nextVertexIndex);
@@ -360,22 +369,38 @@ public class RoadMap {
 			for (Edge e : (startingVertex.getIncidentRoads())){
 				if (visitedVertexes.contains(e.getFirstVertex())){
 					// ignore it
+
+					System.out.println("Ignored vertex = " + (e.getFirstVertex()).getIndex());
+
 				} else {
+
+					System.out.println("Adding vertex = " + (e.getFirstVertex()).getIndex());
+
 					toVisitVertexes.add(e.getFirstVertex());
 				}
 
 				if (visitedVertexes.contains(e.getSecondVertex())){
 					// ignore it
+
+					System.out.println("Ignored vertex = " + (e.getSecondVertex()).getIndex());
+
 				} else {
+
+					System.out.println("Adding vertex = " + (e.getSecondVertex()).getIndex());
+
 					toVisitVertexes.add(e.getSecondVertex());
 				}
 			}
 			
+			System.out.println("Size of visited vertexes list = " + visitedVertexes.size());
+			System.out.println("Number of places total = " + numPlaces());
+
 			if (visitedVertexes.size() == numPlaces()){
 				allNodesVisited = true;
 			}
 		}
 
+		System.out.println("End reached");
 		return carsRequried;
 	}
 
