@@ -170,7 +170,7 @@ public class RoadMap {
 		}
 	}
 
-	// Task 1: Load the map from a text file
+	// Task 1 #PASS#
 	public void loadMap(String filename) {
 		File file = new File(filename);
 		places.clear();
@@ -229,11 +229,7 @@ public class RoadMap {
 		}
 	}
 
-
-	// Task 2: Check if two vertices are connected by a path with charging stations on each itermediate vertex.
-	// Return true if such a path exists; return false otherwise.
-	// The worst-case time complexity of your algorithm should be no worse than O(v + e),
-	// where v and e are the number of vertices and the number of edges in the graph.
+	// Task 2 #PASS#
 	public boolean isConnectedWithChargingStations(Vertex startVertex, Vertex endVertex) {
 		// Sanity check
 		if (startVertex.getIndex() == endVertex.getIndex()) {
@@ -249,7 +245,6 @@ public class RoadMap {
 		int numOfVertexes = 1;
 
 		while (loopStateCheck != 0){
-		
 			loopStateCheck = 2; // we assume that there is nowhere to go until proven otherwise
 
 			// get connected nodes
@@ -273,7 +268,7 @@ public class RoadMap {
 							}
 						}
 					}
-					
+
 					// if the node is the end we're searching for we can stop here immediately
 					if (e.getSecondVertex() == endVertex){
 						return true;
@@ -299,13 +294,13 @@ public class RoadMap {
 			// change start node
 			if (loopStateCheck == 1){
 				// when move forward
-				startVertex = validVertexes.get(numOfVertexes);
+				startVertex = validVertexes.get(numOfVertexes - 1);
 			} else if (loopStateCheck == 2) {
 				// when move backward
-				startVertex = validVertexes.get(numOfVertexes);
-				invalidVertexes.add(validVertexes.get(numOfVertexes));
-				validVertexes.remove(numOfVertexes);
-				numOfVertexes -= 1;
+				startVertex = validVertexes.get(numOfVertexes - 1);
+				invalidVertexes.add(validVertexes.get(numOfVertexes - 1));
+				validVertexes.remove(numOfVertexes - 1);
+				numOfVertexes -= 1;			
 			}
 
 			if (numOfVertexes == 0){
@@ -314,7 +309,6 @@ public class RoadMap {
 			// change start node
 
 			}
-
 		//---
 
 		// The following return statement is just a placeholder.
@@ -324,64 +318,56 @@ public class RoadMap {
 	}
 
 
-	// Task 3: Determine the mininum number of assistance cars required
+	// Task 3: Determine the mininum number of assistance cars required #FAIL#
 	public int minNumAssistanceCars() {
 		// Add your code here to compute and return the minimum number of assistance cars required for this map
 
 		// ---		
-		// 1) pick random node
-		// 2) figure out random route that goes through every possible node
-		// 3) backtrack when at dead end
-		// 4) when start node reached, add 1 to car counter
-		// 5a) keep all visited nodes in an array until a new node can be selected
-		//     once new node selected, add the number of nodes to a counter and clear list
-		// 5b) check if node counter is equal to the total number of nodes present
-		//     if so, exit the loop, and return the number of cars requried
-		// 6) idk at this point
-
-		int carsRequried = 0;
 		int nextVertexIndex = 0;
 		boolean allNodesVisited = false;
 		ArrayList <Vertex> visitedVertexes = new ArrayList<Vertex>();
 		ArrayList <Vertex> toVisitVertexes = new ArrayList<Vertex>();
+		int carsRequried = 0;
 
 		while (allNodesVisited == false){
-			
 			Vertex startingVertex = places.get(nextVertexIndex);
 			
-			if (toVisitVertexes.isEmpty() == false){ //where toVisitVertexes has new places to go to
-				visitedVertexes.add(toVisitVertexes.get(0));
+			if (toVisitVertexes.isEmpty() == false){ // toVisitVertexes has items
 				startingVertex = toVisitVertexes.get(0);
 				toVisitVertexes.remove(0);
-			} else { // where toVisitVertexes is empty (so there are no new vertexes to visit)
-				carsRequried += 1;
-				while (visitedVertexes.contains(startingVertex) == false && nextVertexIndex != places.size() ){
-					//ignore it
-					nextVertexIndex += 1;
-					startingVertex = places.get(nextVertexIndex);
+
+				if (toVisitVertexes.isEmpty() == true){
+					carsRequried += 1;
 				}
+
+			} else { // toVisitVertexes is empty
+				nextVertexIndex += 1;
+			}
+
+			if (visitedVertexes.contains(startingVertex)){
+				//ignore it
+			} else {
 				visitedVertexes.add(startingVertex);
+
+				for (Edge road : startingVertex.getIncidentRoads()) {
+					if (visitedVertexes.contains(road.getFirstVertex()) || (toVisitVertexes.contains(road.getFirstVertex()))){
+						//ignore it
+					} else {
+						toVisitVertexes.add(road.getFirstVertex());
+					}
+
+					if (visitedVertexes.contains(road.getSecondVertex()) || (toVisitVertexes.contains(road.getSecondVertex()))){
+						//ignore it
+					} else {
+						toVisitVertexes.add(road.getSecondVertex());
+					}
+				}
 			}
 
-
-			for (Edge e : (startingVertex.getIncidentRoads())){
-				if (visitedVertexes.contains(e.getFirstVertex())){
-					// ignore it
-				} else {
-					toVisitVertexes.add(e.getFirstVertex());
-				}
-
-				if (visitedVertexes.contains(e.getSecondVertex())){
-					// ignore it
-				} else {
-					toVisitVertexes.add(e.getSecondVertex());
-				}
-			}
-			
-	
 			if (visitedVertexes.size() == numPlaces()){
 				allNodesVisited = true;
 			}
+
 		}
 
 		return carsRequried;
