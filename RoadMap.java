@@ -354,7 +354,7 @@ public class RoadMap {
 
 				toVisitVertexes.remove(0);
 			} else { // where toVisitVertexes is empty (so there are no new vertexes to visit)
-				carsRequried += 1;
+				
 
 				System.out.println("Number of cars required = " + carsRequried);
 
@@ -369,11 +369,8 @@ public class RoadMap {
 			for (Edge e : (startingVertex.getIncidentRoads())){
 				if (visitedVertexes.contains(e.getFirstVertex())){
 					// ignore it
-
-					System.out.println("Ignored vertex = " + (e.getFirstVertex()).getIndex());
-
 				} else {
-
+					carsRequried += 1;
 					System.out.println("Adding vertex = " + (e.getFirstVertex()).getIndex());
 
 					toVisitVertexes.add(e.getFirstVertex());
@@ -381,11 +378,8 @@ public class RoadMap {
 
 				if (visitedVertexes.contains(e.getSecondVertex())){
 					// ignore it
-
-					System.out.println("Ignored vertex = " + (e.getSecondVertex()).getIndex());
-
 				} else {
-
+					carsRequried += 1;
 					System.out.println("Adding vertex = " + (e.getSecondVertex()).getIndex());
 
 					toVisitVertexes.add(e.getSecondVertex());
