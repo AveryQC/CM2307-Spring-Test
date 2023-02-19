@@ -327,46 +327,61 @@ public class RoadMap {
 		boolean allNodesVisited = false;
 		ArrayList <Vertex> visitedVertexes = new ArrayList<Vertex>();
 		ArrayList <Vertex> toVisitVertexes = new ArrayList<Vertex>();
+		ArrayList <Vertex> nodeStack = new ArrayList<Vertex>();
 		int carsRequried = 0;
 
 		while (allNodesVisited == false){
-			Vertex startingVertex = places.get(nextVertexIndex);
-			
-			if (toVisitVertexes.isEmpty() == false){ // toVisitVertexes has items
-				startingVertex = toVisitVertexes.get(0);
+			Vertex currentVertex = places.get(nextVertexIndex);
+			System.out.println(currentVertex.getIndex());
+
+			if (toVisitVertexes.isEmpty() == false){
+				currentVertex = toVisitVertexes.get(0);
+				System.out.println("Next vertex is " + currentVertex.getIndex());
 				toVisitVertexes.remove(0);
-
-				if (toVisitVertexes.isEmpty() == true){
-					carsRequried += 1;
-				}
-
-			} else { // toVisitVertexes is empty
-				nextVertexIndex += 1;
 			}
 
-			if (visitedVertexes.contains(startingVertex)){
-				//ignore it
-			} else {
-				visitedVertexes.add(startingVertex);
-
-				for (Edge road : startingVertex.getIncidentRoads()) {
-					if (visitedVertexes.contains(road.getFirstVertex()) || (toVisitVertexes.contains(road.getFirstVertex()))){
-						//ignore it
+			// when current node is yet to be discovered
+			if (visitedVertexes.contains(currentVertex) == false){
+				System.out.println("Current vertex is pushed to the stack");
+				// add current positon to stack
+				nodeStack.add(currentVertex);
+				// get all unvisited/unseen neighbours
+				for (Edge road : currentVertex.getIncidentRoads()) {
+					if(visitedVertexes.contains(road.getFirstVertex()) || toVisitVertexes.contains(road.getFirstVertex())){
+						// ignore it
 					} else {
+						// add to visit list
+						System.out.println("New node 1 added to visit list");
 						toVisitVertexes.add(road.getFirstVertex());
 					}
-
-					if (visitedVertexes.contains(road.getSecondVertex()) || (toVisitVertexes.contains(road.getSecondVertex()))){
-						//ignore it
+					if(visitedVertexes.contains(road.getSecondVertex()) || toVisitVertexes.contains(road.getSecondVertex())){
+						// ignore it
 					} else {
+						//add to visit list
+						System.out.println("New node 2 added to visit list");
 						toVisitVertexes.add(road.getSecondVertex());
 					}
 				}
+
+				if (visitedVertexes.size() == numPlaces()){		
+					allNodesVisited = true;
+				}
+			// when the current node has already been visited
+			} else {
+				// we go to the next one
+				nextVertexIndex += 1;
 			}
 
+			// when there are no more nodes to visit (we backtracked to the beginning node)
+			if (nodeStack.isEmpty() == true){
+				carsRequried += 1;
+			}
+
+			// when all nodes have been discovered
 			if (visitedVertexes.size() == numPlaces()){
 				allNodesVisited = true;
 			}
+
 
 		}
 
