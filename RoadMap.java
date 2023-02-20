@@ -323,69 +323,56 @@ public class RoadMap {
 		// Add your code here to compute and return the minimum number of assistance cars required for this map
 
 		// ---		
-		int nextVertexIndex = 0;
-		boolean allNodesVisited = false;
-		ArrayList <Vertex> visitedVertexes = new ArrayList<Vertex>();
-		ArrayList <Vertex> toVisitVertexes = new ArrayList<Vertex>();
-		ArrayList <Vertex> nodeStack = new ArrayList<Vertex>();
-		int carsRequried = 0;
+		ArrayList<Vertex> visitedVertexs = new ArrayList<Vertex>();
+		ArrayList<Vertex> stack = new ArrayList<Vertex>();
+		int numOfCarsRequired = 0;
+		int nextVertexToCheckID = 0;
+		
 
-		while (allNodesVisited == false){
-			Vertex currentVertex = places.get(nextVertexIndex);
-			System.out.println(currentVertex.getIndex());
+		while (visitedVertexs.size() != numPlaces()){
+			if (stack.isEmpty() == true){
+				Vertex temporaryVertex = places.get(nextVertexToCheckID);
+				nextVertexToCheckID += 1;
 
-			if (toVisitVertexes.isEmpty() == false){
-				currentVertex = toVisitVertexes.get(0);
-				System.out.println("Next vertex is " + currentVertex.getIndex());
-				toVisitVertexes.remove(0);
-			}
-
-			// when current node is yet to be discovered
-			if (visitedVertexes.contains(currentVertex) == false){
-				System.out.println("Current vertex is pushed to the stack");
-				// add current positon to stack
-				nodeStack.add(currentVertex);
-				// get all unvisited/unseen neighbours
-				for (Edge road : currentVertex.getIncidentRoads()) {
-					if(visitedVertexes.contains(road.getFirstVertex()) || toVisitVertexes.contains(road.getFirstVertex())){
-						// ignore it
-					} else {
-						// add to visit list
-						System.out.println("New node 1 added to visit list");
-						toVisitVertexes.add(road.getFirstVertex());
-					}
-					if(visitedVertexes.contains(road.getSecondVertex()) || toVisitVertexes.contains(road.getSecondVertex())){
-						// ignore it
-					} else {
-						//add to visit list
-						System.out.println("New node 2 added to visit list");
-						toVisitVertexes.add(road.getSecondVertex());
-					}
+				if (visitedVertexs.contains(temporaryVertex) == false){
+					numOfCarsRequired += 1;
 				}
 
-				if (visitedVertexes.size() == numPlaces()){		
-					allNodesVisited = true;
+				for (Edge road : temporaryVertex.getIncidentRoads()) {
+					Vertex adjacentVertexOne = road.getFirstVertex();
+					Vertex adjacentVertexTwo = road.getSecondVertex();
+
+					if (visitedVertexs.contains(adjacentVertexOne) == false && stack.contains(adjacentVertexOne) == false){
+						stack.add(adjacentVertexOne);
+					}
+
+					if (visitedVertexs.contains(adjacentVertexTwo) == false && stack.contains(adjacentVertexTwo) == false){
+						stack.add(adjacentVertexTwo);
+					}
 				}
-			// when the current node has already been visited
 			} else {
-				// we go to the next one
-				nextVertexIndex += 1;
+				int sizeOfStack = stack.size() - 1;
+				Vertex temporaryVertex = stack.get(sizeOfStack);
+				stack.remove(sizeOfStack);
+
+				visitedVertexs.add(temporaryVertex);
+				for (Edge road : temporaryVertex.getIncidentRoads()) {
+					Vertex adjacentVertexOne = road.getFirstVertex();
+					Vertex adjacentVertexTwo = road.getSecondVertex();
+
+					if (visitedVertexs.contains(adjacentVertexOne) == false && stack.contains(adjacentVertexOne) == false){
+						stack.add(adjacentVertexOne);
+					}
+
+					if (visitedVertexs.contains(adjacentVertexTwo) == false && stack.contains(adjacentVertexTwo) == false){
+						stack.add(adjacentVertexTwo);
+					}
+				}
 			}
-
-			// when there are no more nodes to visit (we backtracked to the beginning node)
-			if (nodeStack.isEmpty() == true){
-				carsRequried += 1;
-			}
-
-			// when all nodes have been discovered
-			if (visitedVertexes.size() == numPlaces()){
-				allNodesVisited = true;
-			}
-
-
 		}
 
-		return carsRequried;
+		return numOfCarsRequired;
+
 	}
 
 
