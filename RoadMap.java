@@ -237,29 +237,23 @@ public class RoadMap {
 		}
 
 		int loopStateCheck = 1;
+		int numOfVertexes = 1;
 		ArrayList<Vertex> validVertexes = new ArrayList<Vertex>();
 		ArrayList<Vertex> invalidVertexes = new ArrayList<Vertex>();
 		validVertexes.add(startVertex);
-		int numOfVertexes = 1;
 
 		while (loopStateCheck != 0){
 			loopStateCheck = 2; // we assume that there is nowhere to go until proven otherwise
 
 			// get connected nodes
 				for (Edge e : startVertex.getIncidentRoads()){
-					// if the node is the end we're searching for we can stop here immediately
+					// if the node is the end we're searching for, we can stop here immediately
 					if (e.getFirstVertex() == endVertex){
 						return true;
 					}
-					if (e.getFirstVertex().getIndex() == startVertex.getIndex()){
-						// ignore it
-					} else {
-						if ((e.getFirstVertex()).hasChargingStation() == false){
-							// ignore it
-						} else {
-							if (validVertexes.contains(e.getFirstVertex()) || invalidVertexes.contains(e.getFirstVertex())){
-								// ignore it
-							} else {
+					if (e.getFirstVertex().getIndex() != startVertex.getIndex()){
+						if ((e.getFirstVertex()).hasChargingStation() == true){
+							if (validVertexes.contains(e.getFirstVertex()) == false && invalidVertexes.contains(e.getFirstVertex()) == false){
 								validVertexes.add(e.getFirstVertex());
 								numOfVertexes += 1;
 								loopStateCheck = 1;
@@ -267,19 +261,13 @@ public class RoadMap {
 						}
 					}
 
-					// if the node is the end we're searching for we can stop here immediately
+					// if the node is the end we're searching for, we can stop here immediately
 					if (e.getSecondVertex() == endVertex){
 						return true;
 					}
-					if (e.getSecondVertex().getIndex() == startVertex.getIndex()){
-						// ignore it
-					} else {
-						if ((e.getSecondVertex()).hasChargingStation() == false){
-							// ignore it
-						} else {
-							if (validVertexes.contains(e.getSecondVertex()) || invalidVertexes.contains(e.getSecondVertex())){
-								// ignore it
-							} else {
+					if (e.getSecondVertex().getIndex() != startVertex.getIndex()){
+						if ((e.getSecondVertex()).hasChargingStation() == true){
+							if (validVertexes.contains(e.getSecondVertex()) == false && invalidVertexes.contains(e.getSecondVertex()) == false){
 								validVertexes.add(e.getSecondVertex());
 								numOfVertexes += 1;
 								loopStateCheck = 1;
@@ -287,26 +275,21 @@ public class RoadMap {
 						}
 					}
 			}
-			// get connected nodes
 
 			// change start node
-			if (loopStateCheck == 1){
-				// when move forward
+			if (loopStateCheck == 1){ // when moving forward
 				startVertex = validVertexes.get(numOfVertexes - 1);
-			} else if (loopStateCheck == 2) {
-				// when move backward
+			} else if (loopStateCheck == 2) { // when moving backward
 				startVertex = validVertexes.get(numOfVertexes - 1);
 				invalidVertexes.add(validVertexes.get(numOfVertexes - 1));
 				validVertexes.remove(numOfVertexes - 1);
 				numOfVertexes -= 1;			
 			}
 
-			if (numOfVertexes == 0){
+			if (numOfVertexes == 0){ //if there's no more nodes to check
 				loopStateCheck = 0;
 			}
-			// change start node
-
-			}
+		}
 
 		// The following return statement is just a placeholder.
 		// Update the code to correctly determine whether the tow vertices are connected by a path with charing stations
@@ -318,14 +301,12 @@ public class RoadMap {
 	// Task 3: Determine the mininum number of assistance cars required
 	public int minNumAssistanceCars() {
 		// Add your code here to compute and return the minimum number of assistance cars required for this map
-
-		// ---		
+	
 		ArrayList<Vertex> visitedVertexs = new ArrayList<Vertex>();
 		ArrayList<Vertex> stack = new ArrayList<Vertex>();
 		int numOfCarsRequired = 0;
 		int nextVertexToCheckID = 0;
 		
-
 		while (visitedVertexs.size() != numPlaces()){
 			if (stack.isEmpty() == true){
 				Vertex temporaryVertex = places.get(nextVertexToCheckID);
@@ -347,6 +328,7 @@ public class RoadMap {
 						stack.add(adjacentVertexTwo);
 					}
 				}
+				
 			} else {
 				int sizeOfStack = stack.size() - 1;
 				Vertex temporaryVertex = stack.get(sizeOfStack);
@@ -369,8 +351,6 @@ public class RoadMap {
 		}
 
 		return numOfCarsRequired;
-		// ---
-
 	}
 
 
