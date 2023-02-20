@@ -170,7 +170,7 @@ public class RoadMap {
 		}
 	}
 
-	// Task 1 #PASS#
+	// Task 1: Load the map from a text file
 	public void loadMap(String filename) {
 		File file = new File(filename);
 		places.clear();
@@ -192,11 +192,8 @@ public class RoadMap {
 				// Add your code here to create a new vertex using the information above and add
 				// it to places
 
-				//---
-				// the index of newVertex is determined by {i}
 				Vertex newVertex = new Vertex(placeName, hasChargingStataion, i);
 				places.add(newVertex);
-				//---
 			}
 
 			for (int j = 0; j < numEdges; ++j) {
@@ -211,12 +208,10 @@ public class RoadMap {
 				// it to roads
 				// You should also set up incidentRoads for each vertex
 
-				//---
 				Edge newEdge = new Edge(length, vtx1, vtx2);
 				roads.add(newEdge);
 				vtx1.addIncidentRoad(newEdge);
 				vtx2.addIncidentRoad(newEdge);
-				//---
 			}
 
 			sc.close();
@@ -229,16 +224,19 @@ public class RoadMap {
 		}
 	}
 
-	// Task 2 #PASS#
+
+
+	// Task 2: Check if two vertices are connected by a path with charging stations on each itermediate vertex.
+	// Return true if such a path exists; return false otherwise.
+	// The worst-case time complexity of your algorithm should be no worse than O(v + e),
+	// where v and e are the number of vertices and the number of edges in the graph.
 	public boolean isConnectedWithChargingStations(Vertex startVertex, Vertex endVertex) {
 		// Sanity check
 		if (startVertex.getIndex() == endVertex.getIndex()) {
 			return true;
 		}
 
-		//---
 		int loopStateCheck = 1;
-		// 0 = end process, 1 = new move, 2 = backtrack move
 		ArrayList<Vertex> validVertexes = new ArrayList<Vertex>();
 		ArrayList<Vertex> invalidVertexes = new ArrayList<Vertex>();
 		validVertexes.add(startVertex);
@@ -309,7 +307,6 @@ public class RoadMap {
 			// change start node
 
 			}
-		//---
 
 		// The following return statement is just a placeholder.
 		// Update the code to correctly determine whether the tow vertices are connected by a path with charing stations
@@ -317,8 +314,8 @@ public class RoadMap {
 		return false;
 	}
 
-
-	// Task 3: Determine the mininum number of assistance cars required #FAIL#
+	
+	// Task 3: Determine the mininum number of assistance cars required
 	public int minNumAssistanceCars() {
 		// Add your code here to compute and return the minimum number of assistance cars required for this map
 
@@ -372,6 +369,7 @@ public class RoadMap {
 		}
 
 		return numOfCarsRequired;
+		// ---
 
 	}
 
