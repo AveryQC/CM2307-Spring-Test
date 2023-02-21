@@ -306,11 +306,14 @@ public class RoadMap {
 		ArrayList<Vertex> stack = new ArrayList<Vertex>();
 		int numOfCarsRequired = 0;
 		int nextVertexToCheckID = 0;
-		
+
 		while (visitedVertexs.size() != numPlaces()){
 			if (stack.isEmpty() == true){
 				Vertex temporaryVertex = places.get(nextVertexToCheckID);
-				nextVertexToCheckID += 1;
+				
+				while (visitedVertexs.contains(places.get(nextVertexToCheckID)) || stack.contains(places.get(nextVertexToCheckID))){
+					nextVertexToCheckID += 1;
+				}
 
 				if (visitedVertexs.contains(temporaryVertex) == false){
 					numOfCarsRequired += 1;

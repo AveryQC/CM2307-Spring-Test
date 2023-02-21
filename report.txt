@@ -1,0 +1,22 @@
+Task 2 - Time complexity (testing 1 to 5)
+Map = 5 repeats < 7+9=16
+Map2 = 6 repeats < 7+7=14
+Map3 = 3 repeats < 9+7=16
+
+From performing the same test on all of the map files (Map3 I created to test every possible aspect), the maximum amount of comparisons required will not exceed the maximum complexity of O(v+e).
+
+My algorithm works by only looking in the sub-graph that contains the starting node to find the end node, and performing an implementation of Depth-First search (DFS) on it. It will only make a move if the next node is not the end node and it has a charging station; otherwise, it will move to a different node.
+If the program ends up at a dead end, it will backtrack to the previous node and try a new neighbouring node. If it ends up backtracking to the starting node, and there are no more valid nodes to check, then the program ends and returns false.
+
+
+Task 3 - Time complexity
+Map = 8 repeats < 7+9=16
+Map2 = 10 repeats < 7+7=14
+Map3 = 12 repeats < 9+7=16
+
+From testing all the map files, the maximum amount of comparsions required will not exceed the maximum complexity of O(v+e).
+
+My algorithm has an implementation of DFS which will traverse each sub graph as far as possible until it can travel no further. Every visited node is added to a list so that it isn't registered as a new unvisited node. Once all the nodes in the current subgraph have been marked as visited, my program then uses a small while loop to iterate through the next potential vertex id. This loop reduces the amount of repeat cycles in the outer while loop as it does not allow the program to progress until it finds a new unvisited node in a new subgraph.
+Whenever a new undiscovered node is visited and the node is not present in visitedVertexs, then the number of cars increases by one; what this means is that whenever a new subgraph is about to be traversed, the number of cars required needs to be increased by one.
+
+
