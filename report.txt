@@ -1,4 +1,8 @@
-Task 2 - Time complexity (testing 1 to 5)
+Student number: C21083376
+
+I am analysing the amount of times the while loop that surrounds my code is repeated. 
+
+Task 2 - Time complexity (testing 1 to 5 / A to F)
 Map = 5 repeats < 7+9=16
 Map2 = 6 repeats < 7+7=14
 Map3 = 3 repeats < 9+7=16
@@ -18,5 +22,3 @@ From testing all the map files, the maximum amount of comparsions required will 
 
 My algorithm has an implementation of DFS which will traverse each sub graph as far as possible until it can travel no further. Every visited node is added to a list so that it isn't registered as a new unvisited node. Once all the nodes in the current subgraph have been marked as visited, my program then uses a small while loop to iterate through the next potential vertex id. This loop reduces the amount of repeat cycles in the outer while loop as it does not allow the program to progress until it finds a new unvisited node in a new subgraph.
 Whenever a new undiscovered node is visited and the node is not present in visitedVertexs, then the number of cars increases by one; what this means is that whenever a new subgraph is about to be traversed, the number of cars required needs to be increased by one.
-
-
